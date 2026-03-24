@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Editing Masterclass | Pixel Coach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00C4CC; 
+            --secondary-color: #7d2ae8;
+            --bg-color: #05070a;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --accent-gradient: linear-gradient(135deg, #00C4CC 0%, #7d2ae8 100%);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Navigation --- */
+        .main-nav {
+            background: rgba(5, 7, 10, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-sub);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Highlight the Sign Up/Login Button */
+        .nav-links li:last-child a {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        /* --- Hero Section --- */
+        .video-hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(5, 7, 10, 0.7), rgba(5, 7, 10, 1)), 
+                        url('https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            margin: 0;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        /* --- Grid Layout --- */
+        .main-content {
+            max-width: 1200px;
+            margin: -80px auto 100px;
+            padding: 0 20px;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            perspective: 1500px; 
+            margin-bottom: 50px;
+        }
+
+        /* --- 3D Card Effect --- */
+        .module-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .module-card.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .module-card i, .module-card h3, .module-card p, .module-card .btn-group {
+            transform: translateZ(50px);
+        }
+
+        .module-card i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Background Glow Effect */
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 24px;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 196, 204, 0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .module-card:hover::before { opacity: 1; }
+        .module-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        /* --- Buttons --- */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .yt-btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        .yt-btn.primary { background: var(--accent-gradient); color: white; }
+        .yt-btn.secondary { background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.1); }
+
+        .yt-btn:hover {
+            transform: translateZ(20px) scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        
+        /* --- Footer --- */
+        footer {
+            background: #020408;
+            padding: 80px 20px 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .social-icons { display: flex; gap: 20px; margin-top: 20px; }
+        .social-icons a { color: var(--text-sub); font-size: 1.5rem; transition: 0.3s; }
+        .social-icons a:hover { color: var(--primary-color); transform: translateY(-5px); }
+
+        .footer-form { display: flex; gap: 10px; margin-top: 15px; }
+        .footer-form input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            flex: 1;
+        }
+
+        .footer-form button {
+            background: var(--primary-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-sub);
+            font-size: 0.8rem;
+        }
+
+        .back-link {
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            color: var(--text-sub);
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .back-link:hover { color: var(--primary-color); }
+
+    </style>
+</head>
+   <header class="main-nav">
+        <nav class="nav-container">
+            <a href="#" class="logo">Pixel<span>Coach</span></a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Tools</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li id="signupNav"><a href="form.html">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<body>
+
+    <section class="video-hero">
+        <div class="hero-content">
+            <h1>Master the Edit</h1>
+            <p style="color: var(--text-sub); font-size: 1.2rem;">Craft stories that demand attention.</p>
+        </div>
+    </section>
+
+      <main class="main-content">
+        <div class="modules-grid">
+            <div class="module-card reveal">
+                <i class="fas fa-film"></i>
+                <h3>Narrative Cutting</h3>
+                <p>Learn pacing and rhythm techniques used by Hollywood editors.</p>
+                <div class="btn-group">
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9G9EyGpQYJ50godTuIi8IJM&si=IbL-nvJZ4gl50Br-" class="yt-btn primary">Beginner</a>
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9ECmGPJxJ-db4fsX01OHR0_&si=lTs65rYH6vlmfI1A" class="yt-btn secondary">Pro</a>
+                </div>
+            </div>
+
+            <div class="module-card reveal">
+                <i class="fas fa-droplet"></i>
+                <h3>Color Grading</h3>
+                <p>Master Lumetri Color and DaVinci Resolve for cinematic looks.</p>
+                <div class="btn-group">
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9HBk2eG6dzECl_zb7BtRugW&si=r9Ktwkd_suKX9OiM" class="yt-btn primary">Beginner</a>
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9H5EbzNreO8_hbUPxhLSMg0&si=pTE-FZupPWSdWwCL" class="yt-btn secondary">Pro</a>
+                </div>
+            </div>
+
+            <div class="module-card reveal">
+                <i class="fas fa-bolt"></i>
+                <h3>Motion Graphics</h3>
+                <p>Integrate After Effects for stunning titles and VFX overlays.</p>
+                <div class="btn-group">
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9FvkHl8_KWzbaUCwYB-daJw&si=28ZHPR-y0deVm-XL" class="yt-btn primary">Beginner</a>
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9HvT9jkR9QUQI3jSWdZR4K5&si=-yHR61LJnmmpe58C" class="yt-btn secondary">Pro</a>
+                </div>
+            </div>
+
+            <div class="module-card reveal">
+                <i class="fas fa-volume-high"></i>
+                <h3>Sound Effects</h3>
+                <p>Learn audio ducking and how to mix immersive soundscapes.</p>
+                <div class="btn-group">
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9G3Uks-HTN8vdXMsSTNZlu0&si=dd_XWZNG4guq8S_0" class="yt-btn primary">Sound Effects</a>
+                
+                </div>
+            </div>
+            <div class="module-card reveal">
+                <i class="fas fa-video"></i>
+                <h3>Stock Footage</h3>
+                <p>Download Stock Footages form these websites.</p>
+                <div class="btn-group">
+                    <a href="https://pixabay.com/videos/search/" class="yt-btn primary">Stock Footages</a>
+                    <a href="https://www.freepik.com/videos" class="yt-btn primary">Stock Footage</a>
+                </div>
+            </div>
+        </div>
+<div style="text-align: center;">
+            <a href="index.html" style="text-decoration:none; color:var(--text-sub); font-weight:600;"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </main>
+
+   <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section brand-info">
+                <div class="logo">Pixel<span>Coach</span></div>
+                <p style="color:var(--text-sub); max-width: 300px;">Empowering the next generation of digital creators with professional workflows.</p>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/pixelcoach_?igsh=MTV6OHRjN3BmeXIwbg=="><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@PixelCoach-7"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.facebook.com/pixelcoach"><i class="fab fa-facebook"></i></a>
+                    <a href="https://x.com/CoachPixel" target="_blank">
+<i class="fab fa-x"></i>
+</a>
+                </div>
+            </div>
+
+            <div class="footer-section newsletter">
+                <h3>Stay Inspired</h3>
+                <form class="footer-form">
+                    <input type="email" placeholder="pixelcoach7@gmail.com" required>
+                    <button type="submit">Join</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Pixel Coach. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 150);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.module-card').forEach(card => observer.observe(card));
+
+        // 2. Advanced 3D Tilt Logic
+        const cards = document.querySelectorAll('.module-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                
+                // Get mouse position relative to card (%)
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                
+                // Set CSS variables for the radial glow
+                card.style.setProperty('--x', `${x}%`);
+                card.style.setProperty('--y', `${y}%`);
+                
+                // Calculate rotation (max 15 degrees)
+                const rotateX = -((y - 50) / 50) * 15;
+                const rotateY = ((x - 50) / 50) * 15;
+                
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Reset with a smooth transition
+                card.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+/* 1. Global Reset & Variables */
+:root {
+    --primary: #00d2ff;
+    --secondary: #92fe9d;
+    --dark: #0f172a;
+    --light: #f8fafc;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #0f172a; 
+    color: white;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+
+/* Fixed Background Layer */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), 
+                url('backgrand.png');
+    background-size: cover;
+    z-index: -1;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0,0,0,0.8);
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Cards Layout */
+.categories-container, .pricing-container {
+    display: flex;
+    gap: 20px;
+    padding: 50px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.category-card, .price-card, .glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.3s;
+}
+
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background: #222;
+    margin: 15% auto;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+}
+/* Show the modal via JavaScript by toggling this class */
+.modal.active {
+    display: flex !important; 
+}
+/* 2. Navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.logo { 
+    font-size: 1.5rem; 
+    font-weight: 800; 
+    letter-spacing: -1px;
+}
+.logo span { color: var(--primary); }
+
+.nav-links { 
+    display: flex; 
+    list-style: none; 
+    align-items: center; 
+    gap: 2rem; 
+}
+
+.nav-links a { 
+    color: #cbd5e1; 
+    text-decoration: none; 
+    font-weight: 500;
+    transition: var(--transition); 
+}
+
+.nav-links a:hover { color: var(--primary); }
+
+.signin-btn {
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    border: none; 
+    padding: 10px 24px; 
+    border-radius: 50px; 
+    cursor: pointer; 
+    font-weight: 600;
+    color: var(--dark);
+    transition: var(--transition);
+}
+
+.signin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+}
+
+/* 3. Layout & Sections */
+.slide { 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    padding: 80px 10%; 
+}
+
+/* Hero Content */
+.hero-content { text-align: center; max-width: 800px; }
+
+.hero-content h1 { 
+    font-size: clamp(2.5rem, 8vw, 4.5rem); 
+    line-height: 1.1;
+    margin-bottom: 1.5rem; 
+}
+
+.hero-content h1 span { 
+    background: linear-gradient(to right, var(--primary), var(--secondary)); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+}
+
+.cta-main {
+    margin-top: 2rem;
+    padding: 18px 45px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: var(--primary);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.cta-main:hover { 
+    transform: scale(1.05);
+    background: #00b8e6;
+}
+
+/* Categories Section Styling */
+.categories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 4rem 10%;
+    margin-top: -50px; /* Pulls it slightly into the hero section for a modern look */
+    z-index: 10;
+    position: relative;
+}
+
+.category-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.category-card i {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.category-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.category-card p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .categories-container {
+        margin-top: 0;
+        padding: 2rem 5%;
+    }
+}
+
+/* 4. Feature/About Section */
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 4rem;
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    text-align: center;
+    max-width: 900px;
+}
+
+.stats { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    gap: 2rem; 
+    margin-top: 3rem;
+}
+
+.stats h3 { font-size: 2.5rem; color: var(--secondary); }
+/* ============================= */
+/* INSTRUCTOR SECTION */
+/* ============================= */
+
+.instructor-section{
+    padding:80px 10%;
+    text-align:center;
+    background:#0f0f0f;
+}
+
+.instructor-section h2{
+    font-size:40px;
+    margin-bottom:50px;
+    color:#fff;
+}
+
+.instructor-container{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:30px;
+}
+
+/* Instructor Card */
+
+.instructor-card{
+    background:#1b1b1b;
+    border-radius:15px;
+    overflow:hidden;
+    width:260px;
+    transition:0.4s;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* 1. Update the Card */
+.instructor-card {
+    background: #1b1b1b;
+    border-radius: 15px;
+    /* overflow: hidden; */ /* Remove or comment this out to let image 'pop out' */
+    width: 260px;
+    transition: 0.4s ease-in-out;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    position: relative;
+    z-index: 1;
+}
+
+/* 2. Card Hover: Change Background Color */
+.instructor-card:hover {
+    background: #252525; /* Changes the box color on hover */
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgb(255, 37, 37); /* Optional: added a glow */
+    z-index: 10; /* Ensures the 'popped out' card stays on top of others */
+}
+
+/* 3. Image Hover: Increase size and "Pop out" */
+.instructor-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth 'pop' effect */
+    border-radius: 15px 15px 0 0;
+}
+
+.instructor-card:hover img {
+    transform: scale(1.1); /* Increases size */
+    border-radius: 15px;   /* Makes corners rounded as it lifts off */
+    margin-top: -10px;     /* Moves it slightly upward further */
+}
+/* Instructor Image */
+
+.instructor-card img{
+    width:100%;
+    height:280px;
+    object-fit:cover;
+}
+
+/* Instructor Info */
+
+.instructor-info{
+    padding:20px;
+}
+
+.instructor-info h3{
+    color:#fff;
+    font-size:20px;
+    margin-bottom:5px;
+}
+
+.instructor-info p{
+    color:#aaa;
+    font-size:14px;
+    margin-bottom:15px;
+}
+
+/* Social Icons */
+
+.instructor-social{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+}
+
+.instructor-social a{
+    color:#fff;
+    font-size:18px;
+    transition:0.3s;
+}
+
+.instructor-social a:hover{
+    color:#ff4d4d;
+}
+
+/* 5. Pricing Section */
+.pricing-container { 
+    display: flex; 
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch; /* Ensures cards are the same height */
+    gap: 2.5rem; 
+    width: 100%;
+}
+
+.price-card {
+    background: var(--glass);
+    padding: 3rem 2rem;
+    border-radius: 24px;
+    width: 320px;
+    display: flex;           /* Added: Flexbox for vertical control */
+    flex-direction: column;  /* Added: Stack elements vertically */
+    align-items: center;     /* Added: Center children horizontally */
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    transition: var(--transition);
+}
+
+.price-card.featured { 
+    border: 2px solid var(--primary); 
+    background: rgba(0, 210, 255, 0.05);
+    transform: scale(1.05); 
+    z-index: 1; /* Ensures featured card shadow stays on top */
+}
+
+/* Feature List Alignment */
+.price-card ul { 
+    list-style: none; 
+    margin: 2rem 0; 
+    padding: 0;             /* Ensure no default padding */
+    text-align: left; 
+    flex-grow: 1;           /* Added: Pushes the button to the bottom */
+}
+
+/* The Gradient Button Fixes */
+.btn-gradient {
+    display: block;          /* Changed from inline-block to block */
+    margin: 0 auto;          /* Centers it within the flex container */
+    padding: 1rem 2rem;
+    width: 100%;             
+    max-width: 240px;        /* Slightly wider for better balance */
+    background: linear-gradient(135deg, var(--primary), #0072ff);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    box-sizing: border-box;  /* Ensures padding doesn't break width */
+}
+/* 6. Modal Enhancement - Fixed & Centered */
+.modal {
+    display: none; /* Controlled by JS */
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.7); /* Deep dark overlay */
+    backdrop-filter: blur(8px); /* Blur background for focus */
+    
+    /* The Magic Sauce for Centering */
+    display: none; 
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add this utility class to use with JS to show the modal */
+.modal.active {
+    display: flex; 
+}
+
+.modal-content {
+    background: #1e293b;
+    background-image: radial-gradient(at top left, rgba(255,255,255,0.05), transparent);
+    width: 90%;
+    max-width: 420px;
+    padding: 3rem 2.5rem;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    text-align: center;
+    animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-content h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.modal-content p {
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+/* Close Button Styling */
+.close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 1.5rem;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: var(--transition);
+    line-height: 1;
+}
+
+.close:hover {
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* Input Styling for Form */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 14px 20px;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    transition: var(--transition);
+}
+
+.input-group input:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px rgba(0, 210, 255, 0.1);
+}
+/* Footer Styles */
+.main-footer {
+    background: #111;
+    color: #fff;
+    padding: 60px 10% 20px;
+    margin-top: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section h3 {
+    color: #00C4CC; /* Matching your Canva tool color */
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.brand-info p {
+    color: #bbb;
+    line-height: 1.6;
+    margin: 15px 0;
+}
+
+.social-icons a {
+    color: #fff;
+    margin-right: 15px;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #00C4CC;
+}
+
+.links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.links ul li {
+    margin-bottom: 10px;
+}
+
+.links ul li a {
+    color: #bbb;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.links ul li a:hover {
+    color: #fff;
+    padding-left: 5px;
+}
+
+.footer-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.footer-form input {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    flex: 1;
+}
+
+.footer-form button {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #00C4CC, #7d2ae8);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.footer-bottom a {
+    color: #777;
+    text-decoration: none;
+}
+
+/* Animation */
+@keyframes modalSlideUp {
+    from { 
+        transform: translateY(40px) scale(0.95); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateY(0) scale(1); 
+        opacity: 1; 
+    }
+}
+@keyframes modalFade {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 7. Scroll Animations (The Missing Piece) */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 8. Responsive Media Queries */
+@media (max-width: 768px) {
+    .nav-links, .search-bar { display: none; } /* Hide on mobile for simplicity */
+    .slide { padding: 100px 5%; }
+    .pricing-container { flex-direction: column; align-items: center; }
+    .price-card.featured { transform: scale(1); }
+}

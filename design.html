@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Designing | 3D Creative Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --accent-1: #6366f1;
+            --accent-2: #ec4899;
+            --bg-color: #020617; 
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --transition: all 0.1s ease; /* Faster for 3D tracking */
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            perspective: 1000px; /* Essential for 3D */
+        }
+
+        /* --- Header Styles --- */
+        header.main-nav {
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .logo { font-size: 1.6rem; font-weight: 800; text-decoration: none; color: var(--text-main); }
+        .logo span { background: #00d2ff; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { color: var(--text-sub); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary-color); }
+
+        /* --- Main Content --- */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 160px 20px 80px;
+        }
+
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            background: linear-gradient(to right, #fff, var(--primary-color), var(--accent-2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* --- 3D Category Cards --- */
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+            perspective: 1000px;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            border-radius: 24px;
+            text-align: center;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transform-style: preserve-3d; /* Allows children to be in 3D space */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 400px;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        /* The "Pop-out" Effect for content */
+        .card-content {
+            transform: translateZ(50px); /* Pushes text forward */
+            pointer-events: none;
+        }
+
+        .category-card i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: translateZ(80px); /* Pushes icon even further forward */
+            display: inline-block;
+        }
+
+        /* --- Progress & Buttons --- */
+        .progress-section { 
+            margin-top: 25px; 
+            transform: translateZ(40px); /* Pushes progress forward */
+        }
+        
+        .progress-bar-bg {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            height: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .courseProgress {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-2));
+            transition: width 0.8s ease;
+        }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 20px; pointer-events: auto; }
+        .yt-btn {
+            padding: 12px; border-radius: 12px; text-decoration: none;
+            font-weight: 600; font-size: 0.85rem; flex: 1; color: white;
+            transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .yt-btn.primary { background: linear-gradient(45deg, var(--accent-1), var(--accent-2)); }
+        .yt-btn.secondary { background: rgba(255,255,255,0.1); }
+        .yt-btn:hover { transform: translateZ(20px) scale(1.05); }
+
+        /* --- Footer --- */
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 60px 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 50px;
+        }
+
+        .footer-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; }
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
+        .social-icons a { color: var(--text-sub); font-size: 1.2rem; transition: 0.3s; }
+        .social-icons a:hover { color: var(--primary-color); transform: translateY(-3px); }
+
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; color: var(--text-sub); }
+
+    </style>
+</head>
+
+<body>
+    <header class="main-nav">
+        <nav class="nav-container">
+            <a href="#" class="logo">Pixel<span>Coach</span></a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Tools</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="form.html">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+ <main class="main-content">
+        <header class="section-header reveal">
+            <h1>Creative Solutions</h1>
+            <p style="color: var(--text-sub); font-size: 1.1rem;">Premium visual storytelling for the digital age.</p>
+        </header>
+
+        <div class="categories-container">
+            <div class="category-card reveal" data-category="logo" style="animation-delay: 0.1s;">
+                <div>
+                    <i class="fas fa-pen-nib"></i>
+                    <h3>Logo Design</h3>
+                    <p style="color: var(--text-sub);">Crafting unique brand marks that stand the test of time.</p>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-bar-bg"><div class="courseProgress"></div></div>
+                    <p class="progressText" style="margin: 10px 0; font-weight:600; font-size: 0.85rem;">0% Completed</p>
+                    <div class="btn-group">
+                        <a href="https://youtube.com/playlist?list=PLIvvii1oTr9G3aK1UsLP1lD7AedE3pLSz&si=NYcQFqc9J5wUQsg0" class="yt-btn primary track-link">Beginner</a>
+                        <a href="https://youtube.com/playlist?list=PLIvvii1oTr9HnGJMFBGZe7D-kU_ztX_rU&si=RgxgH5vFyxKcTykG" class="yt-btn secondary track-link">Expert</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card reveal" data-category="uiux" style="animation-delay: 0.2s;">
+                <div>
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    <h3>UI/UX Design</h3>
+                    <p style="color: var(--text-sub);">Designing seamless digital journeys and functional aesthetics.</p>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-bar-bg"><div class="courseProgress"></div></div>
+                    <p class="progressText" style="margin: 10px 0; font-weight:600; font-size: 0.85rem;">0% Completed</p>
+                    <div class="btn-group">
+                        <a href="https://youtube.com/playlist?list=PLIvvii1oTr9GAILuFIwlOTkHh0CGCjhlo&si=Sjp2SyWnNn97FlUL" class="yt-btn primary track-link">Beginner</a>
+                        <a href="https://youtube.com/playlist?list=PLIvvii1oTr9H_XHZ4-oQ_gWkF8u4gHVzG&si=wTgEAb8_PoyUlTrp" class="yt-btn secondary track-link">Expert</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card reveal" data-category="poster" style="animation-delay: 0.3s;">
+                <div>
+                    <i class="fas fa-clapperboard"></i>
+                    <h3>Poster Design</h3>
+                    <p style="color: var(--text-sub);">High-impact visual communication for cinematic storytelling.</p>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-bar-bg"><div class="courseProgress"></div></div>
+                    <p class="progressText" style="margin: 10px 0; font-weight:600; font-size: 0.85rem;">0% Completed</p>
+                    <div class="btn-group">
+                        <a href="https://youtube.com/playlist?list=PLIvvii1oTr9Hf7T5T2f2mBCWEV6exBL15&si=Ow816fEC3ixQst-Y" class="yt-btn primary track-link">Beginner</a>
+                        <a href="https://youtube.com/playlist?list=PLIvvii1oTr9E22S3_TwBkbytOcO0KCmX4&si=gc0Ohsgsd6IXmFLG" class="yt-btn secondary track-link">Expert</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" style="text-decoration:none; color:var(--text-sub); font-weight:600;"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </main>
+
+      <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="logo">Pixel<span>Coach</span></div>
+                <p>Empowering the next generation of digital creators.</p>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/pixelcoach_?igsh=MTV6OHRjN3BmeXIwbg=="><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@PixelCoach-7"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.facebook.com/pixelcoach"><i class="fab fa-facebook"></i></a>
+                    <a href="https://x.com/CoachPixel" target="_blank">
+<i class="fab fa-x"></i>
+</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Stay Inspired</h3>
+                <form class="footer-form">
+                    <input type="email" placeholder="pixelcoach7@gmail.com" required>
+                    <button type="submit">Join</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Pixel Coach. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 3D Tilt Logic ---
+        const cards = document.querySelectorAll('.category-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const cardRect = card.getBoundingClientRect();
+                const cardWidth = cardRect.width;
+                const cardHeight = cardRect.height;
+                
+                // Calculate mouse position relative to card center
+                const centerX = cardRect.left + cardWidth / 2;
+                const centerY = cardRect.top + cardHeight / 2;
+                const mouseX = e.clientX - centerX;
+                const mouseY = e.clientY - centerY;
+
+                // Degrees of rotation (max 20deg)
+                const rotateX = (-mouseY / (cardHeight / 2)) * 20;
+                const rotateY = (mouseX / (cardWidth / 2)) * 20;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+            });
+        });
+
+        // --- Progress Logic ---
+        function initProgress() {
+            const categories = ['logo', 'uiux', 'poster'];
+            categories.forEach(cat => {
+                const card = document.querySelector(`[data-category="${cat}"]`);
+                const bar = card.querySelector('.courseProgress');
+                const text = card.querySelector('.progressText');
+                const links = card.querySelectorAll('.track-link');
+
+                let progress = parseInt(localStorage.getItem(`progress_${cat}`)) || 0;
+                
+                const updateDisplay = (val) => {
+                    bar.style.width = val + '%';
+                    text.innerText = val + '% Completed';
+                    if(val >= 100) {
+                        text.style.color = "#4ade80";
+                        text.innerHTML = '✓ Course Finished';
+                    }
+                };
+
+                updateDisplay(progress);
+
+                links.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        if (progress < 100) {
+                            progress += 10;
+                            localStorage.setItem(`progress_${cat}`, progress);
+                            updateDisplay(progress);
+                        }
+                        this.setAttribute('target', '_blank'); 
+                    });
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initProgress);
+    </script>
+</body>
+</html>

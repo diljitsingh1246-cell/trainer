@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Editing Masterclass | Pixel Coach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #a855f7; 
+            --accent-color: #ec4899;
+            --bg-color: #05070a;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.15);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* --- Navigation --- */
+        .main-nav {
+            padding: 20px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span { color: #00d2ff; }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: #fff; }
+
+        /* --- Hero Section --- */
+        .photo-hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 0;
+        }
+
+        .hero-content h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            background: linear-gradient(135deg, #fff 30%, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 15px 0;
+            line-height: 1.1;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-sub);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- 3D Modules Grid --- */
+        .main-content {
+            max-width: 1200px;
+            margin: -60px auto 100px;
+            padding: 0 20px;
+            perspective: 1500px;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .module-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(227, 6, 139, 0.207);
+            padding: 40px;
+            border-radius: 32px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease, opacity 0.6s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .module-card.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .module-card:hover {
+            box-shadow: var(--hover-shadow);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        /* Popping elements inside card */
+        .module-card i, .module-card h3, .module-card p, .module-card .btn-group {
+            transform: translateZ(40px);
+        }
+
+        .module-card i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        h3 { font-family: 'Outfit', sans-serif; font-size: 1.7rem; margin: 0 0 15px 0; }
+        p { color: var(--text-sub); line-height: 1.6; margin-bottom: 20px; }
+
+        /* --- Buttons --- */
+        .btn-group { display: flex; gap: 12px; margin-top: auto; }
+        
+        .yt-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .yt-btn.primary { background: #fff; color: #000; }
+        .yt-btn.secondary { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .yt-btn:hover { 
+            transform: translateZ(20px) scale(1.05); 
+            filter: brightness(1.1);
+        }
+
+        /* Go Back Button Styling */
+        .back-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+        }
+
+        .back-btn {
+            padding: 15px 35px;
+            border-radius: 50px;
+            background: transparent;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+
+        /* --- Footer --- */
+        .main-footer {
+            padding: 80px 20px 40px;
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .social-icons { display: flex; gap: 20px; margin-top: 20px; }
+        .social-icons a { color: var(--text-sub); font-size: 1.3rem; transition: 0.3s; }
+        .social-icons a:hover { color: var(--primary-color); transform: translateY(-3px); }
+
+        .footer-form { display: flex; gap: 10px; margin-top: 15px; }
+        .footer-form input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 12px;
+            color: #fff;
+            flex: 1;
+            outline: none;
+        }
+
+        .footer-form button {
+            background: var(--primary-color);
+            border: none;
+            color: #fff;
+            padding: 0 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .footer-form button:hover { opacity: 0.9; transform: scale(1.05); }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-nav">
+        <nav class="nav-container">
+            <a href="#" class="logo">Pixel<span>Coach</span></a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Tools</a></li>
+                <li><a href="#">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="photo-hero">
+        <div class="hero-content">
+            <h1>Master Photo Retouching</h1>
+            <p>Elevate your imagery with industry-standard techniques and professional workflows.</p>
+        </div>
+    </section>
+
+   <main class="main-content">
+        <div class="modules-grid">
+            <div class="module-card">
+                <i class="fas fa-id-badge"></i>
+                <h3>High-End Retouching</h3>
+                <p>Master Frequency Separation and Dodge & Burn techniques for flawless skin textures.</p>
+                <div class="btn-group">
+    <button onclick="openVideo('PLIvvii1oTr9Hdk-sf321hKK8TU4kNKf5z')" class="yt-btn primary">Beginner</button>
+    <button onclick="openVideo('PLIvvii1oTr9GVTbtwwgGCZsPuCwpO5K57')" class="yt-btn secondary">Expert</button>
+</div>
+            </div>
+
+            <div id="videoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; align-items:center; justify-content:center;">
+    <div style="position:relative; width:80%; max-width:900px; aspect-ratio: 16/9;">
+        <button onclick="closeVideo()" style="position:absolute; top:-40px; right:0; background:none; border:none; color:white; font-size:2rem; cursor:pointer;">&times;</button>
+        <iframe id="videoFrame" width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+</div>
+
+            <div class="module-card">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                <h3>Color Grading</h3>
+                <p>Learn to blend multiple images seamlessly using advanced masking and lighting matches.</p>
+                <div class="btn-group">
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9Hy8hLlg4xIuUZBkeFyGem5&si=JEf5lxQ99PH_rfSH" class="yt-btn primary">Beginner</a>
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9G6Pq6Z68fXl67eE-06rYuj&si=f_LVgYRghNO_TzKn" class="yt-btn secondary">Expert</a>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <i class="fas fa-sliders"></i>
+                <h3>Editing</h3>
+                <p>Maximize dynamic range using Adobe Camera Raw and Lightroom's powerful engine.</p>
+                <div class="btn-group">
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9G9DYTeo7shF38EZ3HnfiyI&si=wS0DcgowckyYv1Dr" class="yt-btn primary">Beginner</a>
+                    <a href="https://youtube.com/playlist?list=PLIvvii1oTr9EF2BVwtwIGq2geie4PeK5W&si=qr_0J0AyFP5bP0It" class="yt-btn secondary">Expert</a>
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section brand-info">
+                <div class="logo">Pixel<span>Coach</span></div>
+                <p style="color:var(--text-sub); max-width: 300px;">Empowering the next generation of digital creators with professional workflows.</p>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/pixelcoach_?igsh=MTV6OHRjN3BmeXIwbg=="><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@PixelCoach-7"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.facebook.com/pixelcoach"><i class="fab fa-facebook"></i></a>
+                   <a href="https://x.com/CoachPixel" target="_blank">
+<i class="fab fa-x"></i>
+</a>
+                </div>
+            </div>
+
+            <div class="footer-section newsletter">
+                <h3>Stay Inspired</h3>
+                <form class="footer-form">
+                    <input type="email" placeholder="pixelcoach7@gmail.com" required>
+                    <button type="submit">Join</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Pixel Coach. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for scroll-in animation
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        // 3D Tilt Effect
+        const cards = document.querySelectorAll('.module-card');
+        
+        cards.forEach(card => {
+            observer.observe(card);
+
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Sensitivity: higher divisor = less tilt
+                const rotateX = (centerY - y) / 15; 
+                const rotateY = (x - centerX) / 15;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.transition = "transform 0.5s ease"; // Smooth return
+            });
+
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = "transform 0.1s ease-out"; // Snappy response
+            });
+        });
+        function openVideo(playlistId) {
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoFrame');
+    // We use 'videoseries' to tell YouTube it's a playlist
+    frame.src = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1`;
+    modal.style.display = 'flex';
+}
+
+function closeVideo() {
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoFrame');
+    frame.src = ""; // Stop the video
+    modal.style.display = 'none';
+}
+    </script>
+</body>
+</html>
